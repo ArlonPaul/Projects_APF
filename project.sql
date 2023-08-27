@@ -27,57 +27,57 @@ To check for the overview for each of the tables, please check the following que
 */
 
 SELECT	'Customers',
-		13 AS number_of_attributes,
-		COUNT(*) AS number_of_rows
+	13 AS number_of_attributes,
+	COUNT(*) AS number_of_rows
   FROM	customers
   
  UNION	ALL 
  
 SELECT	'Products',
-		9 AS number_of_attributes,
-		COUNT(*) AS number_of_rows
+	9 AS number_of_attributes,
+	COUNT(*) AS number_of_rows
   FROM	products
   
  UNION	ALL	
  
 SELECT	'Productlines',
-		4 AS number_of_attributes,
-		COUNT(*) AS number_of_rows
+	4 AS number_of_attributes,
+	COUNT(*) AS number_of_rows
   FROM	productlines
   
  UNION	ALL	
  
 SELECT	'Orders',
-		7 AS number_of_attributes,
-		COUNT(*) AS number_of_rows
+	7 AS number_of_attributes,
+	COUNT(*) AS number_of_rows
   FROM	orders
   
  UNION	ALL	
  
 SELECT	'OrderDetails',
-		5 AS number_of_attributes,
-		COUNT(*) AS number_of_rows
+	5 AS number_of_attributes,
+	COUNT(*) AS number_of_rows
   FROM	orderdetails
   
  UNION	ALL	
  
 SELECT	'Payments',
-		4 AS number_of_attributes,
-		COUNT(*) AS number_of_rows
+	4 AS number_of_attributes,
+	COUNT(*) AS number_of_rows
   FROM	payments
   
  UNION	ALL	
  
 SELECT	'Employees',
-		8 AS number_of_attributes,
-		COUNT(*) AS number_of_rows
+	8 AS number_of_attributes,
+	COUNT(*) AS number_of_rows
   FROM	employees
   
  UNION	ALL	
  
 SELECT	'Offices',
-		9 AS number_of_attributes,
-		COUNT(*) AS number_of_rows
+	9 AS number_of_attributes,
+	COUNT(*) AS number_of_rows
   FROM	offices;
   
 /*Which products do we prioritize in ordering more of or less of?  
@@ -86,13 +86,13 @@ Let's write a query to determine the top 10
 products that are getting low in stock due to multiple orders*/
 
 SELECT 	o.productCode, 
-		ROUND(SUM(o.quantityOrdered)*1.0/
+	ROUND(SUM(o.quantityOrdered)*1.0/
 		
-		(SELECT	quantityInStock
-		   FROM	products AS p
-		  WHERE	o.productCode=p.productCode),2) 
+	(SELECT	quantityInStock
+	   FROM	products AS p
+	  WHERE	o.productCode=p.productCode),2) 
 		  
-		AS low_stock
+	AS low_stock
 		
   FROM	orderdetails AS o 
  GROUP	BY o.productCode
@@ -161,13 +161,13 @@ low_s_high_p AS (
 SELECT	l.productCode, l.low_stock, h.product_performance
   FROM	high_perf_p AS h
   JOIN	low_stock_p AS l
-	ON	l.productCode = h.productCode)
+    ON	l.productCode = h.productCode)
 	
 
 SELECT	p1.productName,lsp.*
   FROM	low_s_high_p AS lsp
   JOIN	products AS p1 
-	ON	lsp.productCode = p1.productCode
+    ON	lsp.productCode = p1.productCode
 	
 /*
 Using the two queries from above as two CTEs, the resulting table shows that the productCode 1968 Ford Mustang (S12_1099)
@@ -176,12 +176,12 @@ since it is also ranking 5th at the highest performing models
 
 changing the limit in both CTEs from 10 to 20 will show additional models for consideration, such as 1928 Mercedes-Benz SSK. 
 
-	productName					 productCode		low_stock		product_performance
-	1968 Ford Mustang				S12_1099		13.72			161531.48      			<----- TOP PRIORITY FOR RESTOCKING
+	productName				productCode		low_stock		product_performance
+	1968 Ford Mustang			S12_1099		13.72			161531.48      	<----- TOP PRIORITY FOR RESTOCKING
 	1928 Mercedes-Benz SSK			S18_2795		1.61			132275.98
-	1969 Ford Falcon				S12_3891		0.92			152543.02      
+	1969 Ford Falcon			S12_3891		0.92			152543.02      
 	1957 Corvette Convertible		S18_4721		0.81			130749.31         
-	1958 Setra Bus					S12_1666		0.62			119085.25
+	1958 Setra Bus				S12_1666		0.62			119085.25
 */
 
 /*how should we match marketing and communication strategies to customer behaviors?
@@ -194,7 +194,7 @@ SELECT	o.customerNumber, SUM(od.quantityOrdered * (od.priceEach - p.buyPrice)) A
   JOIN	orderdetails AS od
     ON	o.orderNumber = od.orderNumber
   JOIN	products AS p
-	ON	od.productCode = p.productCode
+    ON	od.productCode = p.productCode
  GROUP	BY o.customerNumber),
 
 -- For the top five customers with the highest profit generated 
@@ -202,26 +202,26 @@ profit_generated AS(
 SELECT	c.contactLastName,c.contactFirstName,c.city,c.country,cp.profit	
   FROM	customers AS c
   JOIN	customer_profit AS cp
-	ON	c.customerNumber = cp.customerNumber
+    ON	c.customerNumber = cp.customerNumber
  ORDER	BY cp.profit DESC
  )
 	
  /*
  TOP 5 CUSTOMERS  
-	contactLastName		contactFirstName			city				country				profit
-	Freyre				Diego 						Madrid				Spain				326519.66
-	Nelson				Susan						San Rafael			USA					236769.39
-	Young				Jeff						NYC					USA					72370.09
-	Ferguson			Peter						Melbourne			Australia			70311.07
-	Labrune				Janine 						Nantes				France				60875.3
+	contactLastName			contactFirstName		city				country				profit
+	Freyre				Diego 				Madrid				Spain				326519.66
+	Nelson				Susan				San Rafael			USA				236769.39
+	Young				Jeff				NYC				USA				72370.09
+	Ferguson			Peter				Melbourne			Australia			70311.07
+	Labrune				Janine 				Nantes				France				60875.3
 
   BOTTOM 5 CUSTOMERS -- removing DESC on the ORDER clause
-	contactLastName		contactFirstName			city				country				profit
-	Young				Mary						Glendale			USA					2610.87
-	Taylor				Leslie						Brickhaven			USA					6586.02
-	Ricotti				Franco						Milan				Italy				9532.93
-	Schmitt				Carine 						Nantes				France				10063.8
-	Smith				Thomas 						London				UK					10868.04 
+	contactLastName			contactFirstName		city				country				profit
+	Young				Mary				Glendale			USA				2610.87
+	Taylor				Leslie				Brickhaven			USA				6586.02
+	Ricotti				Franco				Milan				Italy				9532.93
+	Schmitt				Carine 				Nantes				France				10063.8
+	Smith				Thomas 				London				UK				10868.04 
 
 Aside from checking the top customers, we should look into the average profit of the customers per country. 
 Look at this query:
@@ -234,7 +234,7 @@ SELECT	country,ROUND(SUM(profit)/COUNT(*),2) AS average_profit_per_country, COUN
  LIMIT	10
  
  /*
-	country					average_profit_per_country		customers_per_country
+	country						average_profit_per_country				customers_per_country
 	Spain						88000.91						5
 	Singapore					50891.28						2
 	New Zealand					47376.64						4
@@ -243,7 +243,7 @@ SELECT	country,ROUND(SUM(profit)/COUNT(*),2) AS average_profit_per_country, COUN
 	Denmark						42814.65						2
 	Norway						41391.52						1
 	Finland						39079.78						3
-	USA							37394.73						35
+	USA						37394.73						35
 	Austria						36541.4	2						2
 
 These are the top 10 countries with the highest average profit. With Spain at the top with just 5 customers makes it the 
